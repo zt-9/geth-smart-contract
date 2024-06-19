@@ -31,7 +31,7 @@ We can use `solc` or tools like Hardhat or Foundry to generate the ABI and BIN f
    ```
 2. Install the `abigen` tool:
    ```bash
-   go install github.com/ethereum/go-ethereum/cmd/abigen
+    go install github.com/ethereum/go-ethereum/cmd/abigen@latest
    ```
 3. Create a folder named `storage` for our Go package:
    ```bash
