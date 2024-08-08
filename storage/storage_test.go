@@ -28,7 +28,7 @@ var (
 	stopAnvil        func()
 )
 
-func Setup() {
+func setup() {
 	stopAnvil = startAnvil()
 	chainID = big.NewInt(1234)
 	err := deployContract()
@@ -37,14 +37,14 @@ func Setup() {
 	}
 }
 
-func Teardown() {
+func teardown() {
 	stopAnvil()
 }
 
 // TestContractInteraction tests contract write and read
 func TestContractInteraction(t *testing.T) {
-	Setup()
-	defer Teardown()
+	setup()
+	defer teardown()
 
 	// test eth client
 	ethChainid, err := client.ChainID(context.Background())
