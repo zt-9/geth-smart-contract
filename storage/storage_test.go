@@ -29,8 +29,10 @@ var (
 )
 
 func setup() {
-	stopAnvil = startAnvil()
 	chainID = big.NewInt(1234)
+	log.Printf("set chain id %v", chainID)
+	stopAnvil = startAnvil()
+
 	err := deployContract()
 	if err != nil {
 		log.Fatalf("failed to deploy contract%v", err)
@@ -44,7 +46,7 @@ func teardown() {
 // TestContractInteraction tests contract write and read
 func TestContractInteraction(t *testing.T) {
 	setup()
-	defer teardown()
+	t.Cleanup(teardown)
 
 	// test eth client
 	ethChainid, err := client.ChainID(context.Background())
