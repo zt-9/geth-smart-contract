@@ -24,17 +24,32 @@ var (
 	contractAddress  common.Address
 	auth             *bind.TransactOpts
 	contractInstance *Storage
-	chainID          = big.NewInt(1234)
+	chainID          *big.Int
+	stopAnvil        func()
 )
+
+func Setup() {
+	stopAnvil = startAnvil()
+	chainID = big.NewInt(1234)
+	err := deployContract()
+	if err != nil {
+		log.Fatalf("failed to deploy contract%v", err)
+	}
+}
+
+func Teardown() {
+	stopAnvil()
+}
 
 // TestContractInteraction tests contract write and read
 func TestContractInteraction(t *testing.T) {
-	stopAnvil := startAnvil()
-	defer stopAnvil()
+	Setup()
+	defer Teardown()
 
-	// deploy contract
-	err := deployContract()
-	assert.NoError(t, err, "failed to deploy contract")
+	// test eth client
+	ethChainid, err := client.ChainID(context.Background())
+	assert.NoError(t, err)
+	assert.Equal(t, chainID, ethChainid)
 
 	// write to contract. call Storage.store() function
 	user := auth.From
@@ -43,7 +58,6 @@ func TestContractInteraction(t *testing.T) {
 	assert.NoError(t, err, "failed to write to contract")
 
 	// read from contract. call Storage.retreive() function
-
 	result, err := contractInstance.Retrieve(nil, user)
 	assert.NoError(t, err, "failed to read from contract")
 
@@ -103,7 +117,7 @@ func deployContract() error {
 	contractAddress, deployTX, contractInstance, err = DeployStorage(auth, client)
 
 	if err != nil {
-		log.Printf("contract deployment failed")
+		log.Printf("contract deployment failed:%s", err)
 		return err
 	}
 
