@@ -5,7 +5,7 @@ clean:
 # run all tests
 .PHONY: test
 test:
-	go test -v ./...
+	go test ./... -cover
 
 .PHONY: fmt
 fmt:
