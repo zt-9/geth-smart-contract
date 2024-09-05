@@ -3,7 +3,7 @@ This guide provides tutorials for using Geth to deploy and interact with smart c
 
 ## Prerequisite
 - [Golang](https://go.dev/doc/install)
-- [Foundry](https://book.getfoundry.sh/getting-started/installation)
+- [Docker](https://www.docker.com/)
 
 ## 1. Generate the ABI and BIN
 We can use `solc` or tools like Hardhat or Foundry to generate the ABI and BIN files for our contracts.
@@ -55,4 +55,6 @@ make test
 ```
 
 ## Notes
+- [Testcontainers](https://golang.testcontainers.org/) is used for the tests. so we need to start docker before running the tests.
+-  The Testcontainers fetches the the foundry docker image from `ghcr.io/foundry-rs/foundry`. The fetch may fail with error `no matching manifest for linux/arm64/v8 in the manifest list entries` on Apple Silicon chips. You may need to manully pull the image with `docker pull ghcr.io/foundry-rs/foundry --platform linux/x86_64` first if you are on a Apple Silicon Chip and encountered the error.
 - Run `make clean` if you encounter any Go module or package load errors.
